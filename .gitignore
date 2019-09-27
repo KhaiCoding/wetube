@@ -97,3 +97,4 @@ public
 # DynamoDB Local files
 .dynamodb/
 package-lock.json
+uploads

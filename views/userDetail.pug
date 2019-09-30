@@ -9,3 +9,7 @@ block content
         span.video__views=video.vies
         p.video__description=video.description
     .video__comments
+        if video.comments.length === 1
+            span.video__comment-number 1 comment
+        else   
+            span.video__comment-number #{video.comments.length} comments

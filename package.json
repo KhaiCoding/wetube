@@ -1,8 +1,7 @@
 {
   "name": "wetube",
   "version": "1.0.0",
-  "description": "Cloning Youtube by vanillaJS and nodeJS",
-  "main": "index.js",
+  "description": "Cloning Youtube by vanilla and nodeJS",
   "author": "khai",
   "dependencies": {
     "@babel/core": "^7.6.0",
@@ -30,7 +29,7 @@
     "webpack-cli": "^3.3.9"
   },
   "scripts": {
-    "dev:server": "nodemon --exec babel-node init.js --delay 2",
+    "dev:server": "nodemon --exec babel-node init.js --delay 2 --ignore '.scss'",
     "dev:assets": "cross-env WEBPACK_ENV=development webpack -w",
     "build:assets": "WEBPACK_ENV=production webpack"
   },
@@ -39,6 +38,7 @@
     "eslint": "^6.5.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
+    "mini-css-extract-plugin": "^0.8.0",
     "nodemon": "^1.19.2"
   }
 }

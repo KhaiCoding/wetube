@@ -1,16 +1,13 @@
 extends layouts/main
-include mixins/videoBlock
 
 block content
-    .video__player
-        video(src=`${video.fileUrl}`)
-    .video__info
-        a(href=routes.editVideo(video.id)) Edit video
-        h5.video__title=video.title
-        span.video__views=video.vies
-        p.video__description=video.description
-    .video__comments
-        if video.comments.length === 1
-            span.video__comment-number 1 comment
-        else   
-            span.video__comment-number #{video.comments.length} comments
+    .user-profile
+        .user-profile__header
+            img.u-avatar(src=user.avatarUrl)
+            h4.profile__username=user.name
+        if user.id ===loggedUser.id
+            .user-profile__btns
+                a(href=`/users${routes.editProfile}`)
+                    button 📝Edit Profile
+                a(href=`/users${routes.changePassword}`)
+                    button 🔒Change Password

@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import passport from "passport";
 import mongoose from "mongoose";
+import MongoStore from "connect-mongo";
 import session from "express-session";
 import { localsMiddleware } from "./middlewares";
 import routes from "./routes";
@@ -17,8 +18,10 @@ import "./passport";
 
 const app = express();
 
-//  사이트에서 일어나는 모든 연결에 다음의 middleware를 실행
-//  morgan이 기록담당이어서 맨 아래
+const CookieStore = MongoStore(session);
+
+//  After all of connection finished, middleware begin
+//  morgan is final, because of it's function - writing logs
 app.use(helmet());
 app.set("view engine", "pug");
 app.use("/uploads", express.static("uploads"));
@@ -31,7 +34,8 @@ app.use(
   session({
     secret: process.env.COOKIE_SECRET,
     resave: true,
-    saveUninitialized: false
+    saveUninitialized: false,
+    store: new CookieStore({ mongooseConnection: mongoose.connection })
   })
 );
 app.use(passport.initialize());

@@ -35,8 +35,5 @@ passport.use(
   )
 );
 
-// making error : Failed to serialize user into session
-// passport.serializeUser(User.serializeUser());
-// passport.deserializeUser(User.deserializeUser());
-passport.serializeUser((user, done) => done(null, user));
-passport.deserializeUser((user, done) => done(null, user));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());

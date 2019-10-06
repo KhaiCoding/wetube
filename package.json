@@ -4,10 +4,12 @@
   "description": "Cloning Youtube by vanilla and nodeJS",
   "author": "khai",
   "dependencies": {
+    "@babel/cli": "^7.6.2",
     "@babel/core": "^7.6.0",
     "@babel/node": "^7.6.1",
     "@babel/polyfill": "^7.6.0",
     "@babel/preset-env": "^7.6.0",
+    "@babel/runtime": "^7.6.2",
     "autoprefixer": "^9.6.1",
     "aws-sdk": "^2.543.0",
     "axios": "^0.19.0",
@@ -21,7 +23,9 @@
     "express": "^4.17.1",
     "express-session": "^1.16.2",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "get-blob-duration": "^1.1.0",
     "helmet": "^3.21.1",
+    "mongodb": "^3.3.2",
     "mongoose": "^5.7.1",
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
@@ -39,12 +43,19 @@
     "webpack-cli": "^3.3.9"
   },
   "scripts": {
-    "dev:server": "nodemon --exec babel-node init.js --delay 2 --ignore '.scss' --ignore 'static' ",
-    "dev:assets": "cross-env WEBPACK_ENV=development webpack -w",
-    "build:assets": "WEBPACK_ENV=production webpack",
-    "tunnel": "lt --port 4000"
+    "dev:server": "nodemon --exec babel-node src/init.js --delay 2 ",
+    "dev:assets": "cd src && cross-env WEBPACK_ENV=development webpack -w",
+    "build:assets": "cd src && cross-env WEBPACK_ENV=production webpack",
+    "build:server": "babel src --out-dir build --ignore 'src/assets','src/static','src/webpack.config.js'",
+    "copyAll": "xcopy .\\src\\static .\\build\\static\\ /s /y && xcopy .\\src\\views .\\build\\views\\ /s /y",
+    "build": "npm run build:server && npm run build:assets && npm run copyAll",
+    "prebuild": "rd /s /q build",
+    "tunnel": "lt --port 4000",
+    "start": "node build/init.js",
+    "prestart": "npm run build"
   },
   "devDependencies": {
+    "@babel/cli": "^7.6.2",
     "cross-env": "^5.2.1",
     "eslint": "^6.5.0",
     "eslint-config-airbnb-base": "^14.0.0",

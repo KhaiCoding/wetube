@@ -9,7 +9,7 @@ import {
   postJoin,
   postLogin,
   githubLogin,
-  postGithubLogin,
+  postGithubLogIn,
   getMe,
   facebookLogin,
   facebookLoginCallback,
@@ -34,7 +34,7 @@ globalRouter.get(routes.gitHub, githubLogin);
 globalRouter.get(
   routes.githubCallback,
   passport.authenticate("github", { failureRedirect: "/login" }),
-  postGithubLogin
+  postGithubLogIn
 );
 
 globalRouter.get(routes.me, getMe);

@@ -67,7 +67,7 @@ export const githubLoginCallback = async (_, __, profile, cb) => {
   }
 };
 
-export const postGithubLogin = (req, res) => {
+export const postGithubLogIn = (req, res) => {
   res.redirect(routes.home);
 };
 
@@ -109,9 +109,11 @@ export const logout = (req, res) => {
   res.redirect(routes.home);
 };
 
-export const getMe = (req, res) => {
+export const getMe = async (req, res) => {
   // req.user : already logged-in user
-  res.render("userDetail", { pageTitle: "User Detail", user: req.user });
+  const user = await User.findById(req.user.id).populate("videos");
+  // res.render("userDetail", { pageTitle: "User Detail", user: req.user });
+  res.render("userDetail", { pageTitle: "userDetail", user });
 };
 
 export const userDetail = async (req, res) => {
@@ -119,7 +121,8 @@ export const userDetail = async (req, res) => {
     params: { id }
   } = req;
   try {
-    const user = await User.findById(id);
+    const user = await User.findById(id).populate("videos");
+    console.log(user);
     res.render("userDetail", { pageTitle: "User Detail", user });
   } catch (error) {
     res.redirect(routes.home);
@@ -139,7 +142,7 @@ export const postEditProfile = async (req, res) => {
     await User.findByIdAndUpdate(req.user.id, {
       name,
       email,
-      avatarUrl: file ? file.path : req.user.avatarUrl
+      avatarUrl: file ? file.location : req.user.avatarUrl
     });
     // 다른학생 코드
     // req.user.name = name;

@@ -34,10 +34,11 @@ export const getUpload = (req, res) =>
 export const postUpload = async (req, res) => {
   const {
     body: { title, description },
-    file: { path }
+    file: { location }
   } = req;
+  console.log(req.file);
   const newVideo = await Video.create({
-    fileUrl: path,
+    fileUrl: location,
     title,
     description,
     creator: req.user.id
@@ -56,7 +57,9 @@ export const videoDetail = async (req, res) => {
   } = req;
   //  바로 위에서 받은 id를 findById로 넘겨준다.
   try {
-    const video = await Video.findById(id);
+    const video = await Video.findById(id)
+      .populate("creator")
+      .populate("comments");
     res.render("videoDetail", { pageTitle: video.title, video });
   } catch (error) {
     console.log(error);
@@ -70,7 +73,11 @@ export const getEditVideo = async (req, res) => {
   try {
     // 순서가 바뀌면 error 발생
     const video = await Video.findById(id);
-    res.render("editVideo", { pageTitle: `Edit ${video.title}`, video });
+    if (video.creator !== req.user.id) {
+      throw Error();
+    } else {
+      res.render("editVideo", { pageTitle: `Edit ${video.title}`, video });
+    }
   } catch (error) {
     res.redirect(routes.home);
   }
@@ -94,11 +101,60 @@ export const deleteVideo = async (req, res) => {
     params: { id }
   } = req;
   try {
-    // look at mongoose documents, findOneAndRemove
-    await Video.findOneAndRemove({ _id: id });
+    const video = await Video.findById(id);
+    if (video.creator !== req.user.id) {
+      throw Error();
+    } else {
+      // look at mongoose documents, findOneAndRemove
+      await Video.findOneAndRemove({ _id: id });
+    }
   } catch (error) {
     console.log(error);
   }
   // regardless of success, redirect to home
   res.redirect(routes.home);
+};
+
+// Register Video View
+
+// someone click video, this method find the video and views increase
+export const postregisterView = async (req, res) => {
+  const {
+    params: { id }
+  } = req;
+  try {
+    const video = await Video.findById(id);
+    video.views += 1;
+    video.save();
+    res.status(200);
+  } catch (error) {
+    res.status(400);
+  } finally {
+    res.end();
+  }
+};
+
+// Add Comment
+
+export const postAddComment = async (req, res) => {
+  const {
+    params: { id },
+    body: { comment },
+    user
+  } = req;
+  try {
+    const video = await Video.findById(id);
+    //  new Comment making
+    const newComment = await Comment.create({
+      text: comment,
+      creator: user.id
+    });
+    // from models/videos.js
+    video.comments.push(newComment.id);
+    video.save();
+  } catch (error) {
+    res.status(400);
+  } finally {
+    res.end();
+  }
 };

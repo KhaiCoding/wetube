@@ -12,8 +12,10 @@ export const postJoin = async (req, res, next) => {
   } = req;
   // console.log(req.body);
   if (password !== password2) {
+    req.flash("error", "Passwords are not same! ");
     res.status(400);
     res.render("Join", { pageTitle: "Join" });
+    console.log(req);
   } else {
     try {
       const user = await User({

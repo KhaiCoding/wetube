@@ -5,6 +5,8 @@ html
         title #{pageTitle} | #{siteName}
         link(rel="stylesheet", href="/static/styles.css")
     body
+        if messages.error
+            span=messages.error
         include ../partials/header
         main
             block content

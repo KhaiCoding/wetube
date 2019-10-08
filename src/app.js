@@ -8,6 +8,7 @@ import passport from "passport";
 import mongoose from "mongoose";
 import session from "express-session";
 import path from "path";
+import flash from "express-flash";
 import MongoStore from "connect-mongo";
 import { localsMiddleware } from "./middlewares";
 import routes from "./routes";
@@ -40,6 +41,7 @@ app.use(
     store: new CookieStore({ mongooseConnection: mongoose.connection })
   })
 );
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 

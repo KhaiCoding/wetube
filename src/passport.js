@@ -37,5 +37,16 @@ passport.use(
 
 // passport.serializeUser((user, done) => done(null, user));
 // passport.deserializeUser((user, done) => done(null, user));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
+
+passport.serializeUser((user, done) => {
+  // Strategy 성공 시 호출됨
+  done(null, user.id); // 여기의 user._id가 req.session.passport.user에 저장
+});
+passport.deserializeUser((id, done) => {
+  // 매개변수 id는 req.session.passport.user에 저장된 값
+  User.findById(id, (err, user) => {
+    done(null, user); // 여기의 user가 req.user가 됨
+  });
+});

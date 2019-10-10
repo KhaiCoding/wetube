@@ -16,7 +16,9 @@ passport.use(
     {
       clientID: process.env.GH_ID,
       clientSecret: process.env.GH_SECRET,
-      callbackURL: `http://localhost:4000${routes.githubCallback}`
+      callbackURL: process.env.PRODUCTION
+        ? `https://glacial-beach-44039.herokuapp.com${routes.githubCallback}`
+        : `http://localhost:4000${routes.githubCallback}`
     },
     githubLoginCallback
   )
@@ -27,7 +29,7 @@ passport.use(
     {
       clientID: process.env.FB_ID,
       clientSecret: process.env.FB_SECRET,
-      callbackURL: `https://curly-bulldog-81.localtunnel.me${routes.facebookCallback}`,
+      callbackURL: `https://glacial-beach-44039.herokuapp.com${routes.facebookCallback}`,
       profileFields: ["id", "displayName", "email"],
       scope: ["public_profile", "email"]
     },
@@ -35,11 +37,12 @@ passport.use(
   )
 );
 
-// passport.serializeUser((user, done) => done(null, user));
-// passport.deserializeUser((user, done) => done(null, user));
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((user, done) => done(null, user));
 // passport.serializeUser(User.serializeUser());
 // passport.deserializeUser(User.deserializeUser());
 
+/*
 passport.serializeUser((user, done) => {
   // Strategy 성공 시 호출됨
   done(null, user.id); // 여기의 user._id가 req.session.passport.user에 저장
@@ -50,3 +53,4 @@ passport.deserializeUser((id, done) => {
     done(null, user); // 여기의 user가 req.user가 됨
   });
 });
+*/

@@ -42,6 +42,7 @@ app.use(
   })
 );
 app.use(flash());
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -52,5 +53,5 @@ app.use(routes.users, userRouter);
 app.use(routes.videos, videoRouter);
 app.use(routes.api, apiRouter);
 
-// 누군가 내 파일을 import 했을 때, app object를 주겠다는 의미
+// someone import this, give the app object
 export default app;

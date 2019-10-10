@@ -3,7 +3,7 @@ import routes from "../routes";
 import User from "../models/User";
 
 export const getJoin = (req, res) => {
-  res.render("Join", { pageTitle: "Join" });
+  res.render("join", { pageTitle: "Join" });
 };
 
 export const postJoin = async (req, res, next) => {
@@ -14,8 +14,8 @@ export const postJoin = async (req, res, next) => {
   if (password !== password2) {
     req.flash("error", "Passwords are not same! ");
     res.status(400);
-    res.render("Join", { pageTitle: "Join" });
-    console.log(req);
+    res.render("join", { pageTitle: "Join" });
+    // console.log(req);
   } else {
     try {
       const user = await User({
@@ -33,11 +33,13 @@ export const postJoin = async (req, res, next) => {
 };
 
 export const getLogin = (req, res) => {
-  res.render("Login", { pageTitle: "Log In" });
+  res.render("login", { pageTitle: "Log In" });
 };
 export const postLogin = passport.authenticate("local", {
   failureRedirect: routes.login,
-  successRedirect: routes.home
+  successRedirect: routes.home,
+  successFlash: "Welcome",
+  failureFlash: "Can't log in. Check email and/or password"
 });
 
 export const githubLogin = passport.authenticate("github");
@@ -112,10 +114,14 @@ export const logout = (req, res) => {
 };
 
 export const getMe = async (req, res) => {
-  // req.user : already logged-in user
-  const user = await User.findById(req.user.id).populate("videos");
-  // res.render("userDetail", { pageTitle: "User Detail", user: req.user });
-  res.render("userDetail", { pageTitle: "userDetail", user });
+  try {
+    // req.user : already logged-in user
+    const user = await User.findById(req.user.id).populate("videos");
+    // res.render("userDetail", { pageTitle: "User Detail", user: req.user });
+    res.render("userDetail", { pageTitle: "userDetail", user });
+  } catch (error) {
+    res.redirect(routes.home);
+  }
 };
 
 export const userDetail = async (req, res) => {
@@ -124,7 +130,7 @@ export const userDetail = async (req, res) => {
   } = req;
   try {
     const user = await User.findById(id).populate("videos");
-    console.log(user);
+    // console.log(user);
     res.render("userDetail", { pageTitle: "User Detail", user });
   } catch (error) {
     res.redirect(routes.home);
@@ -146,9 +152,6 @@ export const postEditProfile = async (req, res) => {
       email,
       avatarUrl: file ? file.location : req.user.avatarUrl
     });
-    // 다른학생 코드
-    // req.user.name = name;
-    // req.user.email = email;
     res.redirect(routes.me);
   } catch (error) {
     // res.render("editProfile", { pageTitle: "Edit Profile" });

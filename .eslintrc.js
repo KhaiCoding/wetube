@@ -14,9 +14,7 @@ module.exports = {
     sourceType: "module"
   },
   rules: {
-    "no-console": "off"
-  },
-  env: {
-    browser: true
+    "no-console": "off",
+    "no-else-return": ["error", { allowElseIf: true }]
   }
 };

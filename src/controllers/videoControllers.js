@@ -118,7 +118,7 @@ export const deleteVideo = async (req, res) => {
 // Register Video View
 
 // someone click video, this method find the video and views increase
-export const postRegisterView = async (req, res) => {
+export const postregisterView = async (req, res) => {
   const {
     params: { id }
   } = req;

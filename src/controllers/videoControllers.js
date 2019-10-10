@@ -73,7 +73,7 @@ export const getEditVideo = async (req, res) => {
   try {
     // 순서가 바뀌면 error 발생
     const video = await Video.findById(id);
-    if (video.creator !== req.user.id) {
+    if (String(video.creator) !== req.user.id) {
       throw Error();
     } else {
       res.render("editVideo", { pageTitle: `Edit ${video.title}`, video });
@@ -102,7 +102,7 @@ export const deleteVideo = async (req, res) => {
   } = req;
   try {
     const video = await Video.findById(id);
-    if (video.creator !== req.user.id) {
+    if (String(video.creator) !== req.user.id) {
       throw Error();
     } else {
       // look at mongoose documents, findOneAndRemove
@@ -118,7 +118,7 @@ export const deleteVideo = async (req, res) => {
 // Register Video View
 
 // someone click video, this method find the video and views increase
-export const postregisterView = async (req, res) => {
+export const postRegisterView = async (req, res) => {
   const {
     params: { id }
   } = req;

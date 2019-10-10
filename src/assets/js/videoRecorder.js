@@ -17,6 +17,7 @@ const handleVideoData = event => {
 
 const stopRecording = () => {
   videoRecorder.stop();
+  streamObject.getVideoTracks()[0].stop();
   recordBtn.removeEventListener("click", stopRecording);
   recordBtn.addEventListener("click", getVideo);
   recordBtn.innerHTML = "Start recording";

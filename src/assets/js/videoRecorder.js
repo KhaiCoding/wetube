@@ -26,10 +26,10 @@ const stopRecording = () => {
 const startRecording = () => {
   //   console.log(streamObject);
   videoRecorder = new MediaRecorder(streamObject);
-  videoRecorder.start(1000);
+  videoRecorder.start();
   //   console.log(videoRecorder);
   //   setTimeout(() => videoRecorder.stop(), 5000);
-  videoRecorder.addEventListener("dataavilable", handleVideoData);
+  videoRecorder.addEventListener("dataavailable", handleVideoData);
   recordBtn.addEventListener("click", stopRecording);
 };
 
@@ -41,8 +41,9 @@ const getVideo = async () => {
       video: { width: 1280, height: 720 }
     });
     videoPreview.srcObject = stream;
-    // videoPreview.muted=true;
+    videoPreview.muted = true;
     videoPreview.play();
+    recordBtn.innerHTML = "Stop recording";
     streamObject = stream;
     startRecording();
     // console.log(stream);

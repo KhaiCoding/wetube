@@ -67,6 +67,7 @@ export const videoDetail = async (req, res) => {
   }
 };
 export const getEditVideo = async (req, res) => {
+  /*
   const {
     params: { id }
   } = req;
@@ -80,10 +81,16 @@ export const getEditVideo = async (req, res) => {
     }
   } catch (error) {
     res.redirect(routes.home);
-  }
+  }*/
+  const {
+    params: { id }
+  } = req;
+  const video = await Video.findById(id);
+  res.render("editVideo", { pageTitle: `Edit ${video.title}`, video });
 };
 
 export const postEditVideo = async (req, res) => {
+  /*
   const {
     params: { id },
     body: { title, description }
@@ -94,12 +101,21 @@ export const postEditVideo = async (req, res) => {
   } catch (error) {
     res.redirect(routes.home);
   }
+  */
+  const {
+    params: { id },
+    body: { title, description }
+  } = req;
+  await Video.findOneAndUpdate({ _id: id }, { title, description });
 };
 
 export const deleteVideo = async (req, res) => {
   const {
     params: { id }
   } = req;
+  await Video.findOneAndRemove({ _id: id });
+  res.redirect(routes.home);
+  /*
   try {
     const video = await Video.findById(id);
     if (String(video.creator) !== req.user.id) {
@@ -113,6 +129,7 @@ export const deleteVideo = async (req, res) => {
   }
   // regardless of success, redirect to home
   res.redirect(routes.home);
+  */
 };
 
 // Register Video View
